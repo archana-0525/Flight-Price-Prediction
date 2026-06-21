@@ -98,17 +98,6 @@ To generate the model:
 3. The notebook will create `flight_price_model.pkl`
 4. Run the application:
 
-```bash
-streamlit run app.py
-
-
-## Streamlit Application Features
-
-- User-friendly interface
-- Route ID input
-- Travel date selection
-- Instant flight price prediction
-- Fast and interactive UI
 
 
 ## Project Structure

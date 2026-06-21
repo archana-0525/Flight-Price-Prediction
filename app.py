@@ -1,44 +1,65 @@
 import streamlit as st
 import pandas as pd
 import pickle
+import time
 from datetime import date
 
+# ================================
+# PAGE CONFIG
+# ================================
 st.set_page_config(
-    page_title="Flight Price Prediction",
+    page_title="Flight Fare Estimator",
     page_icon="✈️",
-    layout="centered"
+    layout="wide"
 )
 
-# ---------- CSS ----------
+# ================================
+# CUSTOM CSS
+# ================================
 st.markdown("""
 <style>
 .main-title {
-    font-size: 42px;
+    font-size: 46px;
     font-weight: 800;
-    color: #1f2937;
+    color: #172554;
 }
 .subtitle {
-    font-size: 17px;
-    color: #4b5563;
+    font-size: 18px;
+    color: #475569;
+    margin-bottom: 25px;
 }
-.price-card {
-    background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+.card {
+    background: #ffffff;
     padding: 25px;
     border-radius: 18px;
-    border: 1px solid #bae6fd;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+}
+.price-card {
+    background: linear-gradient(135deg, #dbeafe, #eff6ff);
+    padding: 35px;
+    border-radius: 22px;
+    border: 1px solid #93c5fd;
     text-align: center;
+    margin-top: 20px;
 }
 .price {
-    font-size: 38px;
-    font-weight: 800;
-    color: #0369a1;
+    font-size: 46px;
+    font-weight: 900;
+    color: #075985;
+}
+.category {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e3a8a;
 }
 .stButton>button {
     background-color: #2563eb;
     color: white;
-    border-radius: 10px;
-    padding: 0.6rem 1.2rem;
+    border-radius: 12px;
+    padding: 0.7rem 1.4rem;
     border: none;
+    font-weight: 600;
 }
 .stButton>button:hover {
     background-color: #1d4ed8;
@@ -47,7 +68,9 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- LOAD MODEL ----------
+# ================================
+# LOAD MODEL
+# ================================
 @st.cache_resource
 def load_model():
     with open("flight_price_model.pkl", "rb") as file:
@@ -56,58 +79,81 @@ def load_model():
 
 model = load_model()
 
-# ---------- SIDEBAR ----------
-st.sidebar.title("✈️ Flight Predictor")
+# ================================
+# SIDEBAR
+# ================================
+st.sidebar.title("✈️ Flight Fare Estimator")
 st.sidebar.write("""
-This app predicts the average flight ticket price using Machine Learning.
-
-**Inputs Required:**
-- Route ID
-- Travel Date
+Plan your journey with estimated flight fares based on route and travel date.
 """)
 
-st.sidebar.info("Model trained on historical route-wise flight price data.")
+st.sidebar.markdown("### Required Details")
+st.sidebar.write("• Route ID")
+st.sidebar.write("• Travel Date")
 
-# ---------- SESSION HISTORY ----------
+st.sidebar.info("Fare estimates are generated from historical route-wise pricing trends.")
+
+# ================================
+# SESSION HISTORY
+# ================================
 if "history" not in st.session_state:
     st.session_state.history = []
 
-# ---------- MAIN UI ----------
-st.markdown('<div class="main-title">✈️ Flight Price Prediction App</div>', unsafe_allow_html=True)
+# ================================
+# MAIN TITLE
+# ================================
+st.markdown('<div class="main-title">✈️ Flight Fare Estimator</div>', unsafe_allow_html=True)
 st.markdown(
-    '<p class="subtitle">Predict average flight ticket price based on route ID and travel date.</p>',
+    '<div class="subtitle">Estimate route-wise flight fares instantly using historical pricing trends.</div>',
     unsafe_allow_html=True
 )
 
-st.divider()
+# ================================
+# INPUT SECTION
+# ================================
+col1, col2 = st.columns(2)
 
-route_id = st.number_input(
-    "Enter Route ID",
-    min_value=0,
-    step=1,
-    help="Enter the route ID available in the dataset/ticket system."
-)
+with col1:
+    route_id = st.number_input(
+        "Enter Route ID",
+        min_value=0,
+        step=1,
+        help="Enter the route ID available in the ticket system."
+    )
 
-travel_date = st.date_input(
-    "Select Travel Date",
-    value=date.today()
-)
+with col2:
+    travel_date = st.date_input(
+        "Select Travel Date",
+        value=date.today()
+    )
 
 year = travel_date.year
 month = travel_date.month
 day = travel_date.day
 
-if st.button("Predict Flight Price"):
+# ================================
+# PREDICTION
+# ================================
+if st.button("Estimate Fare"):
     input_data = pd.DataFrame(
         [[route_id, year, month, day]],
         columns=["Route_id", "Year", "Month", "Days"]
     )
 
-    prediction = model.predict(input_data)[0]
+    with st.spinner("Calculating fare estimate..."):
+        time.sleep(1)
+        prediction = model.predict(input_data)[0]
+
+    if prediction < 500:
+        fare_category = "Budget Fare"
+    elif prediction < 1000:
+        fare_category = "Standard Fare"
+    else:
+        fare_category = "Premium Fare"
 
     st.markdown(f"""
     <div class="price-card">
-        <h3>Predicted Flight Price</h3>
+        <div class="category">{fare_category}</div>
         <div class="price">₹{prediction:,.2f}</div>
         <p>Route ID: {route_id} | Travel Date: {travel_date}</p>
     </div>
@@ -115,27 +161,54 @@ if st.button("Predict Flight Price"):
 
     st.session_state.history.append({
         "Route ID": route_id,
-        "Travel Date": travel_date,
-        "Predicted Price": round(prediction, 2)
+        "Travel Date": str(travel_date),
+        "Fare Category": fare_category,
+        "Estimated Fare": round(prediction, 2)
     })
 
 st.divider()
 
-# ---------- HISTORY ----------
+# ================================
+# RECENT SEARCHES
+# ================================
 if st.session_state.history:
-    st.subheader("📊 Prediction History")
+    st.subheader("📌 Recent Fare Searches")
 
     history_df = pd.DataFrame(st.session_state.history)
-    st.dataframe(history_df, use_container_width=True)
+
+    for item in reversed(st.session_state.history[-5:]):
+        st.markdown(f"""
+        <div class="card">
+            <b>Route ID:</b> {item["Route ID"]} &nbsp; | &nbsp;
+            <b>Date:</b> {item["Travel Date"]} &nbsp; | &nbsp;
+            <b>Category:</b> {item["Fare Category"]} &nbsp; | &nbsp;
+            <b>Estimated Fare:</b> ₹{item["Estimated Fare"]:,.2f}
+        </div>
+        <br>
+        """, unsafe_allow_html=True)
+
+    st.subheader("📈 Fare Estimate Trend")
+    chart_df = history_df[["Estimated Fare"]]
+    st.line_chart(chart_df)
 
     csv = history_df.to_csv(index=False)
 
-    st.download_button(
-        label="Download Prediction History",
-        data=csv,
-        file_name="flight_price_predictions.csv",
-        mime="text/csv"
-    )
+    col3, col4 = st.columns(2)
 
-# ---------- FOOTER ----------
-st.caption("Developed using Python, Scikit-learn, XGBoost, Pickle and Streamlit.")
+    with col3:
+        st.download_button(
+            label="Download Fare History",
+            data=csv,
+            file_name="fare_estimate_history.csv",
+            mime="text/csv"
+        )
+
+    with col4:
+        if st.button("Clear History"):
+            st.session_state.history = []
+            st.rerun()
+
+# ================================
+# FOOTER
+# ================================
+st.caption("© 2026 Flight Fare Estimator | Smart travel price estimation system.")

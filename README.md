@@ -87,6 +87,21 @@ The models were evaluated using:
 - RMSLE
 
 
+## Trained Model File
+
+The trained model file (`flight_price_model.pkl`) is not included in this repository due to file size limitations.
+
+To generate the model:
+
+1. Open `flight_price_model.ipynb`
+2. Run all notebook cells
+3. The notebook will create `flight_price_model.pkl`
+4. Run the application:
+
+```bash
+streamlit run app.py
+
+
 ## Streamlit Application Features
 
 - User-friendly interface

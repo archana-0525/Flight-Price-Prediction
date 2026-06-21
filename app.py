@@ -7,30 +7,29 @@ from datetime import date
 st.set_page_config(
     page_title="Flight Fare Estimator",
     page_icon="✈️",
-    layout="wide"
+    layout="centered"
 )
 
 @st.cache_resource
 def load_model():
     with open("flight_price_model.pkl", "rb") as file:
-        model = pickle.load(file)
-    return model
+        return pickle.load(file)
 
 model = load_model()
 
 st.markdown("""
 <style>
 [data-testid="stAppViewContainer"] {
-    background: linear-gradient(135deg, #f8fafc 0%, #eef2f7 45%, #e0f2f1 100%);
+    background: linear-gradient(135deg, #f8fafc, #eef2f7, #e0f2f1);
 }
 
 [data-testid="stHeader"] {
-    background: rgba(0,0,0,0);
+    background: transparent;
 }
 
 .block-container {
-    padding-top: 2.5rem;
-    max-width: 1050px;
+    padding-top: 3rem;
+    max-width: 850px;
 }
 
 [data-testid="stSidebar"] {
@@ -38,50 +37,36 @@ st.markdown("""
     border-right: 1px solid #dbe3ea;
 }
 
-[data-testid="stSidebar"] * {
-    color: #0f172a;
-}
-
 .hero {
     background: linear-gradient(135deg, #ffffff, #e8f3f1);
-    padding: 34px;
-    border-radius: 24px;
+    padding: 35px;
+    border-radius: 26px;
     border: 1px solid #d1e3e0;
     box-shadow: 0 12px 35px rgba(15,23,42,0.08);
-    color: #102a43;
-    margin-bottom: 28px;
+    margin-bottom: 30px;
 }
 
 .hero-title {
-    font-size: 46px;
+    font-size: 44px;
     font-weight: 850;
-    margin-bottom: 10px;
     color: #102a43;
 }
 
 .hero-subtitle {
     font-size: 18px;
     color: #52616b;
-}
-
-.card {
-    background: rgba(255,255,255,0.82);
-    padding: 28px;
-    border-radius: 22px;
-    border: 1px solid #dbe3ea;
-    box-shadow: 0 10px 30px rgba(15,23,42,0.07);
-    min-height: 310px;
+    margin-top: 10px;
 }
 
 .result-card {
     background: linear-gradient(135deg, #ffffff, #edf7f5);
-    padding: 32px;
-    border-radius: 24px;
+    padding: 35px;
+    border-radius: 26px;
     text-align: center;
     box-shadow: 0 12px 35px rgba(15,23,42,0.10);
     border: 1px solid #cfe3df;
     animation: fadeIn 0.7s ease-in-out;
-    margin-top: 28px;
+    margin-top: 30px;
 }
 
 .category-badge {
@@ -96,10 +81,10 @@ st.markdown("""
 }
 
 .price {
-    font-size: 50px;
+    font-size: 52px;
     font-weight: 900;
     color: #164e63;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .details {
@@ -113,7 +98,7 @@ st.markdown("""
     background: linear-gradient(135deg, #2f6f73, #3b8c88);
     color: white;
     border-radius: 12px;
-    padding: 0.75rem 1.3rem;
+    padding: 0.8rem 1.3rem;
     border: none;
     font-size: 16px;
     font-weight: 700;
@@ -123,7 +108,6 @@ st.markdown("""
 .stButton>button:hover {
     background: linear-gradient(135deg, #285e61, #327c78);
     color: white;
-    transform: scale(1.01);
 }
 
 .footer {
@@ -146,7 +130,6 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("### Required Details")
 st.sidebar.markdown("✅ Route ID")
 st.sidebar.markdown("✅ Travel Date")
-st.sidebar.markdown("---")
 st.sidebar.info("Fare estimates are generated from historical route-wise pricing trends.")
 
 st.markdown("""
@@ -158,35 +141,21 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-left, right = st.columns(2)
+st.subheader("Enter Travel Details")
 
-with left:
-    st.markdown('<div class="card">', unsafe_allow_html=True)
-    st.subheader("Enter Travel Details")
+route_id = st.number_input(
+    "Route ID",
+    min_value=0,
+    step=1,
+    help="Enter the route ID available in the ticket system."
+)
 
-    route_id = st.number_input(
-        "Route ID",
-        min_value=0,
-        step=1,
-        help="Enter the route ID available in the ticket system."
-    )
+travel_date = st.date_input(
+    "Travel Date",
+    value=date.today()
+)
 
-    travel_date = st.date_input(
-        "Travel Date",
-        value=date.today()
-    )
-
-    estimate_btn = st.button("Estimate Fare")
-    st.markdown('</div>', unsafe_allow_html=True)
-
-with right:
-    st.markdown('<div class="card">', unsafe_allow_html=True)
-    st.subheader("Fare Summary")
-    st.write("Your estimated fare will appear here after entering route details.")
-    st.markdown("• Route-based estimate")
-    st.markdown("• Date-aware pricing")
-    st.markdown("• Simple and instant result")
-    st.markdown('</div>', unsafe_allow_html=True)
+estimate_btn = st.button("Estimate Fare")
 
 if estimate_btn:
     year = travel_date.year

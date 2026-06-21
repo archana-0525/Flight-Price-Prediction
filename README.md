@@ -23,7 +23,7 @@ To build a Machine Learning model that predicts flight ticket prices using:
 
 ## 📊 Dataset Information
 
-The dataset contains approximately **50,000 flight records** with the following attributes:
+The dataset contains approximately **5,96,650 flight records** with the following attributes:
 
 | Column Name | Description |
 |------------|-------------|
@@ -129,37 +129,6 @@ Flight_Price_Prediction/
 
 ---
 
-## 🚀 Installation
-
-Clone the repository:
-
-```bash
-git clone https://github.com/your-username/Flight_Price_Prediction.git
-```
-
-Move into the project directory:
-
-```bash
-cd Flight_Price_Prediction
-```
-
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## ▶️ Run the Application
-
-```bash
-streamlit run app.py
-```
-
-The application will automatically open in your browser.
-
----
 
 ## 📥 User Inputs
 
@@ -178,24 +147,7 @@ and predicts the estimated flight ticket price.
 
 ---
 
-## 📤 Output
 
-The system returns:
-
-```text
-Predicted Flight Price (₹)
-```
-
-### Example
-
-```text
-Route ID : 6423
-Travel Date : 02-09-2024
-
-Predicted Flight Price : ₹513.45
-```
-
----
 
 ## 🔮 Future Enhancements
 

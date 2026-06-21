@@ -1,6 +1,6 @@
 # ✈️ Flight Price Prediction System
 
-## 📌 Project Overview
+## Project Overview
 
 The Flight Price Prediction System is a Machine Learning project that predicts the average flight ticket price based on the Route ID and travel date information.
 
@@ -8,9 +8,9 @@ The project uses historical flight pricing data and multiple regression algorith
 
 A Streamlit web application is developed to allow users to enter route details and obtain instant flight price predictions.
 
----
 
-## 🎯 Objective
+
+## Objective
 
 To build a Machine Learning model that predicts flight ticket prices using:
 
@@ -19,9 +19,9 @@ To build a Machine Learning model that predicts flight ticket prices using:
 - Travel Month
 - Travel Day
 
----
 
-## 📊 Dataset Information
+
+## Dataset Information
 
 The dataset contains approximately **5,96,650 flight records** with the following attributes:
 
@@ -37,15 +37,15 @@ The dataset contains approximately **5,96,650 flight records** with the followin
 | create_date | Record creation timestamp |
 | update_date | Record update timestamp |
 
-### 🎯 Target Variable
+### Target Variable
 
 ```text
 avg_price
 ```
 
----
 
-## ⚙️ Data Preprocessing
+
+## Data Preprocessing
 
 The following preprocessing steps were performed:
 
@@ -56,9 +56,8 @@ The following preprocessing steps were performed:
 - Encoded categorical features where required
 - Feature selection and preparation
 
----
 
-## 🤖 Machine Learning Models Used
+## Machine Learning Models Used
 
 Multiple regression algorithms were trained and evaluated:
 
@@ -74,9 +73,8 @@ Multiple regression algorithms were trained and evaluated:
 
 The best-performing model was selected based on evaluation metrics and saved using Pickle for deployment.
 
----
 
-## 📈 Evaluation Metrics
+## Evaluation Metrics
 
 The models were evaluated using:
 
@@ -88,9 +86,8 @@ The models were evaluated using:
 - Adjusted R² Score
 - RMSLE
 
----
 
-## 🖥️ Streamlit Application Features
+## Streamlit Application Features
 
 - User-friendly interface
 - Route ID input
@@ -98,9 +95,8 @@ The models were evaluated using:
 - Instant flight price prediction
 - Fast and interactive UI
 
----
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 Flight_Price_Prediction/
@@ -113,9 +109,8 @@ Flight_Price_Prediction/
 └── flight_price_model.ipynb
 ```
 
----
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - Python
 - Pandas
@@ -127,10 +122,9 @@ Flight_Price_Prediction/
 - Streamlit
 - Pickle
 
----
 
 
-## 📥 User Inputs
+## User Inputs
 
 The user provides:
 
@@ -145,11 +139,8 @@ The application automatically extracts:
 
 and predicts the estimated flight ticket price.
 
----
 
-
-
-## 🔮 Future Enhancements
+## Future Enhancements
 
 - Source and Destination City Mapping
 - Airline-Based Prediction
@@ -157,6 +148,5 @@ and predicts the estimated flight ticket price.
 - Real-Time Flight Data Integration
 - Deployment on Streamlit Cloud
 
----
 
 ⭐ If you found this project useful, feel free to star the repository.
